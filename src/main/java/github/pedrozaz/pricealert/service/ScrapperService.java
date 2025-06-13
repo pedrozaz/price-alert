@@ -16,12 +16,14 @@ public class ScrapperService {
             page.navigate(url);
             page.waitForSelector(selector);
 
-            String price = page.locator(selector).textContent();
+            String price = page.locator(selector).first().textContent().trim();
 
             browser.close();
+            playwright.close();
             return price;
         } catch (Exception e) {
-            throw new ScrapperException("Error scrapping");
+           e.printStackTrace();
+           throw new ScrapperException("Error");
         }
     }
 }

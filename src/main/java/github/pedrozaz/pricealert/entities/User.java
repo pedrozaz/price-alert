@@ -1,10 +1,12 @@
 package github.pedrozaz.pricealert.entities;
 
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+@Entity
 public class User {
     @Getter
     @Setter
