@@ -5,7 +5,9 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import github.pedrozaz.pricealert.exception.ScrapperException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ScrapperService {
 
     public String findPrice(String url, String selector) {

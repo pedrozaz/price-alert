@@ -1,9 +1,12 @@
 package github.pedrozaz.pricealert.repository;
 
-import github.pedrozaz.pricealert.entities.Product;
+import github.pedrozaz.pricealert.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+    Optional<Product> findByUrl(String url);
 }

@@ -1,6 +1,6 @@
 package github.pedrozaz.pricealert.repository;
 
-import github.pedrozaz.pricealert.entities.Alert;
+import github.pedrozaz.pricealert.entity.Alert;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
