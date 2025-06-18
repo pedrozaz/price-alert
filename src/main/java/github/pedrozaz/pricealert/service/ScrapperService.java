@@ -57,4 +57,16 @@ public class ScrapperService {
            throw new ScrapperException("Error while fetching product name");
         }
     }
+
+    public String findStoreName(String url) {
+        if (url.contains("kabum")) {
+            return "kabum";
+        } else if (url.contains("amazon")) {
+            return "amazon";
+        } else if (url.contains("mercadolivre")) {
+            return "mercadolivre";
+        } else {
+            throw new ScrapperException("Store not supported for URL: " + url);
+        }
+    }
 }

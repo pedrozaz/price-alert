@@ -31,6 +31,25 @@ public class AlertService {
 
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
+    public String cleanUrl(@NotNull String rawUrl) {
+        String cleanedUrl = rawUrl;
+
+        int queryIndex = cleanedUrl.indexOf('?');
+        if (queryIndex != -1) {
+            cleanedUrl = cleanedUrl.substring(0, queryIndex);
+        }
+
+        int fragmentIndex = cleanedUrl.indexOf('#');
+        if (fragmentIndex != -1) {
+            cleanedUrl = cleanedUrl.substring(0, fragmentIndex);
+        }
+
+        if (cleanedUrl.endsWith("/")) {
+            cleanedUrl = cleanedUrl.substring(0, cleanedUrl.length() - 1);
+        }
+        return cleanedUrl;
+    }
+
     public BigDecimal parsePrice(@NotNull String rawPrice) {
         try {
             String cleaned = rawPrice.replaceAll("[^\\d,\\.]", "");
@@ -49,32 +68,33 @@ public class AlertService {
 
     public Alert createAlert(@NotNull AlertRequest request) {
 
+        String cleanedUrl = cleanUrl(request.getUrl());
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseGet(() -> new User(request.getName(), request.getEmail()));
 
-        Optional<Product> optionalProduct = productRepository.findByUrl(request.getUrl());
-        Product product;
+        Optional<Product> optionalProduct = productRepository.findByUrl(cleanedUrl);
+        Product product = new Product();
 
         if (optionalProduct.isPresent()) {
             product = optionalProduct.get();
         } else {
 
-            String rawPrice = scrapperService.findPrice(request.getUrl(), request.getStore());
+            product.setUrl(cleanedUrl);
+            product.setStore(scrapperService.findStoreName(cleanedUrl));
+
+            String rawPrice = scrapperService.findPrice(cleanedUrl, product.getStore());
             if (rawPrice == null || rawPrice.isEmpty()) {
-                throw new AlertException("Failed to fetch product price from URL: " + request.getUrl());
+                throw new AlertException("Failed to fetch product price from URL: " + cleanedUrl);
             }
 
-            String productName = scrapperService.findProductName(request.getUrl(), request.getStore());
+            String productName = scrapperService.findProductName(cleanedUrl, product.getStore());
             if (productName == null || productName.isEmpty()) {
-                throw new AlertException("Failed to fetch product name from URL: " + request.getUrl());
+                throw new AlertException("Failed to fetch product name from URL: " + cleanedUrl);
             }
-
-            product = new Product();
 
             product.setName(productName);
-            product.setUrl(request.getUrl());
             product.setCurrentPrice(parsePrice(rawPrice));
-            product.setStore(request.getStore());
 
             }
 
@@ -95,7 +115,7 @@ public class AlertService {
                 alert.setUser(user);
                 alert.setTargetPrice(request.getTargetPrice());
                 alert.setCreatedAt(formattedLocalDate);
-                alert.setStoreName(request.getStore());
+                alert.setStoreName(product.getStore());
 
                 alert.setNotified(product.getCurrentPrice() !=
                         null && product.getCurrentPrice().compareTo(request.getTargetPrice()) <= 0);
