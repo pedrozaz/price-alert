@@ -125,4 +125,17 @@ public class AlertService {
                 return alertRepository.save(alert);
             }
     }
+
+    public Iterable<Alert> getAlertsByUserId(Long userId) {
+        return alertRepository.findByUserId(userId);
+    }
+
+    public void deleteAlert(Long alertId) {
+        Optional<Alert> optionalAlert = alertRepository.findById(alertId);
+        if (optionalAlert.isPresent()) {
+            alertRepository.delete(optionalAlert.get());
+        } else {
+            throw new AlertException("Alert not found with ID: " + alertId);
+        }
+    }
 }
