@@ -52,7 +52,9 @@ public class AlertService {
 
     public BigDecimal parsePrice(@NotNull String rawPrice) {
         try {
-            String cleaned = rawPrice.replaceAll("[^\\d,\\.]", "");
+            String cleaned = rawPrice.replaceAll("[^\\d,\\.]", "")
+                    .replace("\u00A0", "").
+                    replaceAll("\\s+", "");
             if (cleaned.contains(",") && cleaned.contains(".")) {
                 cleaned = cleaned.replace(".", "").replace(",", ".");
             } else if (cleaned.contains(",")) {

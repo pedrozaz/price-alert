@@ -10,13 +10,16 @@ public class StoreSelectorService {
     private static final Map<String, String> PRICE_SELECTORS = Map.of(
             "kabum", "h4.finalPrice",
             "amazon", "span.a-price-whole",
-            "mercadolivre", "div.ui-pdp-price__second-line span.andes-money-amount__fraction"
+            "mercadolivre", "div.ui-pdp-price__second-line span.andes-money-amount__fraction",
+            "americanas", "div.ProductPrice_productPrice__vpgdo"
+
     );
 
     private static final Map<String, String> PRODUCT_NAME_SELECTORS = Map.of(
             "kabum", "h1.brTtKt",
             "amazon", "span#productTitle",
-            "mercadolivre", "h1.ui-pdp-title"
+            "mercadolivre", "h1.ui-pdp-title",
+            "americanas", "h1.ProductInfoCenter_title__hdTX_"
     );
 
     public String getPriceSelector(String storeName) {

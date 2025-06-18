@@ -65,6 +65,8 @@ public class ScrapperService {
             return "amazon";
         } else if (url.contains("mercadolivre")) {
             return "mercadolivre";
+        } else if (url.contains("americanas")) {
+            return "americanas";
         } else {
             throw new ScrapperException("Store not supported for URL: " + url);
         }
