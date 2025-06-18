@@ -26,22 +26,18 @@ public class Alert implements Serializable {
     private Boolean notified;
     private String storeName;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Alert() {
     }
 
-    public Alert(Product product) {
-        this.product = product;
-    }
-
-    public Alert(Long id, Product product,
-                  BigDecimal targetPrice,
-                 LocalDateTime createdAt, Boolean notified, String storeName) {
-        this.id = id;
+    public Alert(Product product, BigDecimal targetPrice, String storeName, User user) {
         this.product = product;
         this.targetPrice = targetPrice;
-        this.createdAt = createdAt;
-        this.notified = notified;
         this.storeName = storeName;
+        this.user = user;
     }
 
     @Override
