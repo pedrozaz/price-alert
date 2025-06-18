@@ -8,10 +8,15 @@ import github.pedrozaz.pricealert.exception.AlertException;
 import github.pedrozaz.pricealert.repository.AlertRepository;
 import github.pedrozaz.pricealert.repository.ProductRepository;
 import github.pedrozaz.pricealert.repository.UserRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -26,7 +31,9 @@ public class AlertService {
     @Autowired
     private UserRepository userRepository;
 
-    public BigDecimal parsePrice(String rawPrice) {
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+    public BigDecimal parsePrice(@NotNull String rawPrice) {
         try {
             String cleaned = rawPrice.replaceAll("[^\\d,\\.]", "");
             if (cleaned.contains(",") && cleaned.contains(".")) {
@@ -40,15 +47,17 @@ public class AlertService {
         }
     }
 
-    public Alert createAlert(AlertRequest request) {
+    public Alert createAlert(@NotNull AlertRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseGet(() -> new User(request.getName(), request.getEmail()));
 
         Optional<Product> optionalProduct = productRepository.findByUrl(request.getUrl());
         Product product;
 
         if (optionalProduct.isPresent()) {
             product = optionalProduct.get();
-        }
-        else {
+        } else {
 
             String rawPrice = scrapperService.findPrice(request.getUrl(), request.getStore());
             if (rawPrice == null || rawPrice.isEmpty()) {
@@ -61,25 +70,34 @@ public class AlertService {
             }
 
             product = new Product();
+
             product.setName(productName);
             product.setUrl(request.getUrl());
             product.setCurrentPrice(parsePrice(rawPrice));
             product.setStore(request.getStore());
 
-            product = productRepository.save(product);
             }
 
-            User user = userRepository.findByEmail(request.getEmail())
-                    .orElseGet(() -> new User(request.getName(), request.getEmail()));
-
+            product = productRepository.save(product);
             user = userRepository.save(user);
 
             Optional<Alert> optionalAlert = alertRepository.findByProductIdAndUserId(product.getId(), user.getId());
 
             if (optionalAlert.isPresent()) {
-                throw new AlertException("Alert already exists for this product and user.");
+                throw new AlertException("This alert already exists for this user.");
             } else {
-                Alert alert = new Alert(product, request.getTargetPrice(), request.getStore(), user);
+                String now = LocalDateTime.now().format(dateFormat);
+                LocalDateTime formattedLocalDate = LocalDateTime.parse(now, dateFormat);
+
+                Alert alert = new Alert();
+
+                alert.setProduct(product);
+                alert.setUser(user);
+                alert.setTargetPrice(request.getTargetPrice());
+                alert.setCreatedAt(formattedLocalDate);
+                alert.setNotified(false);
+                alert.setStoreName(request.getStore());
+
                 return alertRepository.save(alert);
             }
     }

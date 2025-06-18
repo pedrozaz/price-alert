@@ -31,8 +31,8 @@ public class ScrapperService {
             return price;
 
         } catch (Exception e) {
-           e.printStackTrace();
-           throw new ScrapperException("Error while fetching product price");
+            e.printStackTrace();
+            throw new ScrapperException("Error while fetching product price");
         }
     }
 

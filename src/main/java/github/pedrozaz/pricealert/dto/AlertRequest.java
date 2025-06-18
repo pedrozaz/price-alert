@@ -1,6 +1,5 @@
 package github.pedrozaz.pricealert.dto;
 
-import github.pedrozaz.pricealert.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 

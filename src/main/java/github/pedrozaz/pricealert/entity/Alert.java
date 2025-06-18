@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
@@ -33,11 +34,12 @@ public class Alert implements Serializable {
     public Alert() {
     }
 
-    public Alert(Product product, BigDecimal targetPrice, String storeName, User user) {
+    public Alert(Product product, BigDecimal targetPrice, String storeName, User user, LocalDateTime createdAt) {
         this.product = product;
         this.targetPrice = targetPrice;
         this.storeName = storeName;
         this.user = user;
+        this.createdAt = createdAt;
     }
 
     @Override
