@@ -25,6 +25,7 @@ public class Product implements Serializable {
     private String url;
 
     private BigDecimal currentPrice;
+    private String store;
 
     public Product() {
     }

@@ -43,7 +43,7 @@ public class AlertService {
         if (optionalProduct.isPresent()) {
             product = optionalProduct.get();
         } else {
-            String rawPrice = scrapperService.findPrice(request.getUrl(), "h4.finalPrice");
+            String rawPrice = scrapperService.findPrice(request.getUrl(), request.getStore());
             if (rawPrice == null || rawPrice.isEmpty()) {
                 throw new IllegalArgumentException("Failed to fetch product price from URL: " + request.getUrl());
             }
@@ -52,9 +52,17 @@ public class AlertService {
             product.setName("test");
             product.setUrl(request.getUrl());
             product.setCurrentPrice(price);
+            product.setStore(request.getStore());
             product = productRepository.save(product);
-        }
-        Alert alert = new Alert(product);
-        return alertRepository.save(alert);
+
+            }
+            Optional<Alert> optionalAlert = alertRepository.findByProductId(product.getId());
+
+            if (optionalAlert.isPresent()) {
+                throw new IllegalArgumentException("An alert for this product already exists.");
+            } else {
+                Alert alert = new Alert(product);
+                return alertRepository.save(alert);
+            }
     }
 }

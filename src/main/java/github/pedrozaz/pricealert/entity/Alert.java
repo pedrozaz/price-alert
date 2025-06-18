@@ -11,22 +11,20 @@ import java.util.Objects;
 
 @Entity
 @Getter
+@Setter
 public class Alert implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Setter
     private BigDecimal targetPrice;
-    @Setter
     private LocalDateTime createdAt;
-    @Setter
     private Boolean notified;
+    private String storeName;
 
     public Alert() {
     }
@@ -37,12 +35,13 @@ public class Alert implements Serializable {
 
     public Alert(Long id, Product product,
                   BigDecimal targetPrice,
-                 LocalDateTime createdAt, Boolean notified) {
+                 LocalDateTime createdAt, Boolean notified, String storeName) {
         this.id = id;
         this.product = product;
         this.targetPrice = targetPrice;
         this.createdAt = createdAt;
         this.notified = notified;
+        this.storeName = storeName;
     }
 
     @Override
@@ -55,16 +54,5 @@ public class Alert implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Alert{" +
-                "id=" + id +
-                ", product=" + product +
-                ", targetPrice=" + targetPrice +
-                ", createdAt=" + createdAt +
-                ", notified=" + notified +
-                '}';
     }
 }

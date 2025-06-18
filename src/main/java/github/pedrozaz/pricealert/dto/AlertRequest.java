@@ -12,4 +12,5 @@ public class AlertRequest {
     private String email;
     private String url;
     private String targetPrice;
+    private String store;
 }
