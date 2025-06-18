@@ -10,11 +10,9 @@ import github.pedrozaz.pricealert.repository.ProductRepository;
 import github.pedrozaz.pricealert.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -40,6 +38,8 @@ public class AlertService {
                 cleaned = cleaned.replace(".", "").replace(",", ".");
             } else if (cleaned.contains(",")) {
                 cleaned = cleaned.replace(",", ".");
+            } else if (cleaned.contains(".")) {
+                cleaned = cleaned.replace(".", "");
             }
             return new BigDecimal(cleaned);
         } catch (NumberFormatException e) {
@@ -95,8 +95,10 @@ public class AlertService {
                 alert.setUser(user);
                 alert.setTargetPrice(request.getTargetPrice());
                 alert.setCreatedAt(formattedLocalDate);
-                alert.setNotified(false);
                 alert.setStoreName(request.getStore());
+
+                alert.setNotified(product.getCurrentPrice() !=
+                        null && product.getCurrentPrice().compareTo(request.getTargetPrice()) <= 0);
 
                 return alertRepository.save(alert);
             }
