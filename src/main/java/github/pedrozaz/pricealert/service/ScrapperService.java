@@ -8,8 +8,6 @@ import github.pedrozaz.pricealert.exception.ScrapperException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 public class ScrapperService {
 
@@ -34,7 +32,7 @@ public class ScrapperService {
 
         } catch (Exception e) {
            e.printStackTrace();
-           throw new ScrapperException("Error");
+           throw new ScrapperException("Error while fetching product price");
         }
     }
 
@@ -56,7 +54,7 @@ public class ScrapperService {
 
         } catch (Exception e) {
            e.printStackTrace();
-           throw new ScrapperException("Error");
+           throw new ScrapperException("Error while fetching product name");
         }
     }
 }

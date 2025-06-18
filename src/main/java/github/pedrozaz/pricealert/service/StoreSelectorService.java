@@ -1,5 +1,6 @@
 package github.pedrozaz.pricealert.service;
 
+import github.pedrozaz.pricealert.exception.StoreSelectorException;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ public class StoreSelectorService {
     public String getPriceSelector(String storeName) {
         String selector = PRICE_SELECTORS.get(storeName);
         if (selector == null) {
-            throw new IllegalArgumentException("Store not supported: " + storeName);
+            throw new StoreSelectorException("Store not supported: " + storeName);
         }
         return selector;
     }
@@ -29,7 +30,7 @@ public class StoreSelectorService {
     public String getProductNameSelector(String storeName) {
         String selector = PRODUCT_NAME_SELECTORS.get(storeName);
         if (selector == null) {
-            throw new IllegalArgumentException("Store not supported: " + storeName);
+            throw new StoreSelectorException("Store not supported: " + storeName);
         }
         return selector;
     }

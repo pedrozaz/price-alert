@@ -4,6 +4,7 @@ import github.pedrozaz.pricealert.dto.AlertRequest;
 import github.pedrozaz.pricealert.entity.Alert;
 import github.pedrozaz.pricealert.entity.Product;
 import github.pedrozaz.pricealert.entity.User;
+import github.pedrozaz.pricealert.exception.AlertException;
 import github.pedrozaz.pricealert.repository.AlertRepository;
 import github.pedrozaz.pricealert.repository.ProductRepository;
 import github.pedrozaz.pricealert.repository.UserRepository;
@@ -51,12 +52,12 @@ public class AlertService {
 
             String rawPrice = scrapperService.findPrice(request.getUrl(), request.getStore());
             if (rawPrice == null || rawPrice.isEmpty()) {
-                throw new IllegalArgumentException("Failed to fetch product price from URL: " + request.getUrl());
+                throw new AlertException("Failed to fetch product price from URL: " + request.getUrl());
             }
 
             String productName = scrapperService.findProductName(request.getUrl(), request.getStore());
             if (productName == null || productName.isEmpty()) {
-                throw new IllegalArgumentException("Failed to fetch product name from URL: " + request.getUrl());
+                throw new AlertException("Failed to fetch product name from URL: " + request.getUrl());
             }
 
             product = new Product();
@@ -76,7 +77,7 @@ public class AlertService {
             Optional<Alert> optionalAlert = alertRepository.findByProductIdAndUserId(product.getId(), user.getId());
 
             if (optionalAlert.isPresent()) {
-                throw new IllegalArgumentException("Alert already exists for this product and user.");
+                throw new AlertException("Alert already exists for this product and user.");
             } else {
                 Alert alert = new Alert(product, request.getTargetPrice(), request.getStore(), user);
                 return alertRepository.save(alert);
