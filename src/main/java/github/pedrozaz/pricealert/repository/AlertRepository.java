@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface AlertRepository extends JpaRepository<Alert, Long> {
-    Optional<Alert> findByProductId(Long productId);
     Optional<Alert> findByProductIdAndUserId(Long productId, Long userId);
     Iterable<Alert> findByUserId(Long userId);
 }
