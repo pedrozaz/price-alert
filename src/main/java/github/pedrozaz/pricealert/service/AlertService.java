@@ -68,7 +68,7 @@ public class AlertService {
         }
     }
 
-    public Alert createAlert(@NotNull AlertRequest request) {
+    public Alert createAlert(@NotNull AlertRequest request) throws InterruptedException {
 
         String cleanedUrl = cleanUrl(request.getUrl());
 
@@ -89,6 +89,8 @@ public class AlertService {
             if (rawPrice == null || rawPrice.isEmpty()) {
                 throw new AlertException("Failed to fetch product price from URL: " + cleanedUrl);
             }
+
+            Thread.sleep(1000);
 
             String productName = scrapperService.findProductName(cleanedUrl, product.getStore());
             if (productName == null || productName.isEmpty()) {

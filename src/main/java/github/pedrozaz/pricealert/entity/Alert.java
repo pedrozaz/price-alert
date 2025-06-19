@@ -12,6 +12,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@Table(name = "alert")
 public class Alert implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,24 +2,6 @@ spring:
   application:
     name: Price alert
   profiles:
-    active: ${APP_PROFILE:test}
+    active: ${APP_PROFILE:dev}
   jpa:
     open-in-view: false
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: "guilhermebarbosadspedroza@gmail.com"
-    password: ""
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-cors:
-  origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
-logging:
-  level:
-    root: WARN
-    org.springframework.web: INFO
-    github.pedrozaz.pricealert: INFO

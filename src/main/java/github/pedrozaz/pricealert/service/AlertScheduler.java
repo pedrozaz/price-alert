@@ -32,7 +32,6 @@ public class AlertScheduler {
         this.scrapperService = scrapperService;
         this.alertService = alertService;
     }
-
     @Scheduled(fixedRate = 20000)
     public void checkAlerts() {
         logger.info("Checking alerts...");

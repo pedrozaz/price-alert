@@ -14,7 +14,7 @@ public class AlertController {
     AlertService alertService;
 
     @PostMapping("/alerts")
-    public ResponseEntity<?> createAlert(@RequestBody AlertRequest request) {
+    public ResponseEntity<?> createAlert(@RequestBody AlertRequest request) throws InterruptedException {
         Alert alert = alertService.createAlert(request);
         return ResponseEntity.ok(alert);
     }
