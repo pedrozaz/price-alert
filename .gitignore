@@ -31,3 +31,29 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker ###
+.data/
+.data/postgresql/
+.data/pgadmin
+
+### Ambient ###
+.env
+.env.local
+.env.production
+
+### Logs ###
+*.log
+logs/
+
+### Dependencies ###
+node_modules/
+
+### temp ###
+*.tmp
+*.temp
+
+### system ###
+.DS_Store
+Thumbs.db
+
