@@ -5,8 +5,8 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/pricealert
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: 1234567
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:password}
   jpa:
     show-sql: true
     properties:
@@ -20,10 +20,10 @@ spring:
       platform: postgres
       schema-locations: classpath:schema.sql
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ## INSERT YOUR EMAIL HERE ##
-    password: ## INSERT YOUR APP PASSWORD HERE ##
+    host: {MAIL_HOST:smtp.example.com}
+    port: {MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:

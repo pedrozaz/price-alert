@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AlertScheduler {
@@ -74,14 +75,19 @@ public class AlertScheduler {
                           targetPrice,
                           alert.getUser().getEmail());
 
-                  emailService.sendAlertEmail(
-                          alert.getUser().getEmail(),
-                          alert.getProduct().getName(),
-                          newPrice.toString(),
-                          targetPrice.toString(),
-                          alert.getProduct().getUrl(),
-                          alert.getStoreName(),
-                          LocalDateTime.now());
+                  Map<String, Object> alertData = Map.of(
+                          "productName", alert.getProduct().getName(),
+                          "productUrl", alert.getProduct().getUrl(),
+                          "currentPrice", newPrice,
+                          "targetPrice", targetPrice,
+                          "storeName", alert.getStoreName(),
+                          "currentDate", LocalDateTime.now(),
+                          "isAvailable", true
+                  );
+
+                  emailService.sendAlertEmail(alert.getUser().getEmail(), alertData);
+
+                  logger.info("Alert email sent to user: {}", alert.getUser().getEmail());
 
                   triggeredCount++;
                   alertRepository.delete(alert);
