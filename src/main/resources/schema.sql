@@ -21,3 +21,10 @@ CREATE TABLE IF NOT EXISTS alert (
     store_name VARCHAR(255),
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS price_history (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    price VARCHAR(255),
+    date_time TIMESTAMP
+);

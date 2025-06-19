@@ -1,6 +1,7 @@
 package github.pedrozaz.pricealert.service;
 
 import github.pedrozaz.pricealert.dto.AlertRequest;
+import github.pedrozaz.pricealert.dto.AlertUpdateRequest;
 import github.pedrozaz.pricealert.entity.Alert;
 import github.pedrozaz.pricealert.entity.Product;
 import github.pedrozaz.pricealert.entity.User;
@@ -99,6 +100,7 @@ public class AlertService {
 
             product.setName(productName);
             product.setCurrentPrice(parsePrice(rawPrice));
+            product.addHistory(parsePrice(rawPrice));
 
             }
 
@@ -136,6 +138,17 @@ public class AlertService {
         Optional<Alert> optionalAlert = alertRepository.findById(alertId);
         if (optionalAlert.isPresent()) {
             alertRepository.delete(optionalAlert.get());
+        } else {
+            throw new AlertException("Alert not found with ID: " + alertId);
+        }
+    }
+
+    public Alert updateAlert(Long alertId, AlertUpdateRequest request) {
+        Optional<Alert> optionalAlert = alertRepository.findById(alertId);
+        if (optionalAlert.isPresent()) {
+            Alert alert = optionalAlert.get();
+            alert.setTargetPrice(request.getTargetPrice());
+            return alertRepository.save(alert);
         } else {
             throw new AlertException("Alert not found with ID: " + alertId);
         }

@@ -1,7 +1,7 @@
 package github.pedrozaz.pricealert.controller;
 
 import github.pedrozaz.pricealert.dto.AlertRequest;
-import github.pedrozaz.pricealert.entity.Alert;
+import github.pedrozaz.pricealert.dto.AlertUpdateRequest;
 import github.pedrozaz.pricealert.service.AlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,7 @@ public class AlertController {
 
     @PostMapping("/alerts")
     public ResponseEntity<?> createAlert(@RequestBody AlertRequest request) throws InterruptedException {
-        Alert alert = alertService.createAlert(request);
-        return ResponseEntity.ok(alert);
+        return ResponseEntity.ok(alertService.createAlert(request));
     }
 
     @GetMapping("/alerts")
@@ -28,5 +27,10 @@ public class AlertController {
     public ResponseEntity<?> deleteAlert(@PathVariable Long alertId) {
         alertService.deleteAlert(alertId);
         return ResponseEntity.ok("Alert deleted successfully.");
+    }
+
+    @PutMapping("/alerts/{alertId}")
+    public ResponseEntity<?> updateAlert(@PathVariable Long alertId, @RequestBody AlertUpdateRequest request) {
+        return ResponseEntity.ok(alertService.updateAlert(alertId, request));
     }
 }
